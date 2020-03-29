@@ -22,7 +22,7 @@
 
   <groupId>com.springml</groupId>
   <artifactId>my-beam-pipeline</artifactId>
-  <version>0.1</version>
+  <version>1.${build.number}}</version>
 
   <properties>
     <beam.version>2.19.0</beam.version>
@@ -32,6 +32,21 @@
     <slf4j.version>1.7.25</slf4j.version>
     <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
     <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
+    <build.number>local</build.number>
+
+    <profiles>
+      <profile>
+        <id>jenkins-build</id>
+        <activation>
+          <property>
+            <name>env.BUILD_NUMBER</name>
+          </property>
+        </activation>
+        <properties>
+          <build.number>${env.BUILD_NUMBER}</build.number>
+        </properties>
+      </profile>
+    </profiles>
 
 
   </properties>
