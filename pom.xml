@@ -22,7 +22,7 @@
 
   <groupId>com.springml</groupId>
   <artifactId>my-beam-pipeline</artifactId>
-  <version>1.${build.number}}</version>
+  <version>1.${build.number}</version>
 
   <properties>
     <beam.version>2.19.0</beam.version>

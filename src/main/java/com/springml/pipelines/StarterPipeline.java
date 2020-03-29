@@ -68,7 +68,6 @@ public class StarterPipeline {
 
     input.apply("Publish to PubSub", PubsubIO.writeStrings()
             .to(options.getOutputTopic()));
-
     p.run();
   }
 }
