@@ -35,21 +35,6 @@
     <build.number>local</build.number>
   </properties>
 
-
-  <profiles>
-      <profile>
-        <id>jenkins-build</id>
-        <activation>
-          <property>
-            <name>env.BUILD_NUMBER</name>
-          </property>
-        </activation>
-        <properties>
-          <build.number>${env.BUILD_NUMBER}</build.number>
-        </properties>
-      </profile>
-    </profiles>
-
   <repositories>
     <repository>
       <id>apache.snapshots</id>
@@ -136,6 +121,17 @@
     </pluginManagement>
   </build>
   <profiles>
+    <profile>
+      <id>jenkins-build</id>
+      <activation>
+        <property>
+          <name>env.BUILD_NUMBER</name>
+        </property>
+      </activation>
+      <properties>
+        <build.number>${env.BUILD_NUMBER}</build.number>
+      </properties>
+    </profile>
     <profile>
       <id>direct-runner</id>
       <activation>
