@@ -18,8 +18,7 @@ pipeline {
          steps {
          script
          {
-         config = readYaml file: 'config.yml'
-         git "${config.repo}"
+//          git "${config.repo}"
          sh "mvn clean package"
          }
             // Get some code from a GitHub repository
