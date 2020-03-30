@@ -1,3 +1,7 @@
+node {
+  config = readYaml file: 'config.yaml'
+}
+
 pipeline {
   agent any
 //   {
@@ -7,16 +11,13 @@ pipeline {
 //   }
   environment {
       PATH = "/usr/local/Cellar/maven/3.6.3_1/libexec/bin:$PATH"
-      CREDENTIALS_ID ='myspringml2'
-      BUCKET = 'dataflow-cicd'
-      PATTERN = '*bundled*.jar'
   }
 
    stages {
       stage('Build') {
          steps {
             // Get some code from a GitHub repository
-            git 'https://github.com/hazemshokry/my-beam-pipeline'
+            git ${config.repo}
 
             // Run Maven on a Unix agent.
             sh "mvn clean package"
@@ -24,14 +25,13 @@ pipeline {
       }
       stage('Store to GCS') {
             steps{
-                sh '''
-                    env > build_environment.txt
-                '''
-
-                dir("target"){step([$class: 'ClassicUploadStep', credentialsId: env
-                        .CREDENTIALS_ID,  bucket: "gs://${env.BUCKET}/dev",
-                      pattern: env.PATTERN])
-}
+                dir("target")
+                {
+                step([$class: 'ClassicUploadStep',
+                  credentialsId: ${config.project}
+                  bucket: "gs://${config.bucket}/${config.environment}",
+                  pattern: ${config.pattern}])
+                  }
             }
          }
       }
