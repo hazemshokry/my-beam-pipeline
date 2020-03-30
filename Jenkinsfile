@@ -1,5 +1,5 @@
 node {
-  def config = readYaml file: 'config.yaml'
+  config = readYaml file: 'config.yaml'
 }
 
 pipeline {
