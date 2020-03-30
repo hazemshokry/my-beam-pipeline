@@ -1,6 +1,6 @@
 project: myspringml2
 repo: https://github.com/hazemshokry/my-beam-pipeline
 branch: develop
-environment: dev
+environment: prod
 bucket: dataflow-cicd
 pattern: '*bundled*.jar'
