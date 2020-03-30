@@ -16,24 +16,32 @@ pipeline {
    stages {
       stage('Build') {
          steps {
+         script
+         {
+         config = readYaml file: 'config.yml'
+         git "${config.repo}"
+         sh "mvn clean package"
+         }
             // Get some code from a GitHub repository
-            config = readYaml file: 'config.yml'
-            git "${config.repo}"
+
+
 
             // Run Maven on a Unix agent.
-            sh "mvn clean package"
+
          }
       }
       stage('Store to GCS') {
             steps{
+            script{
             config = readYaml file: 'config.yml'
-                dir("target")
-                {
-                step([$class: 'ClassicUploadStep',
-                  credentialsId: ${config.project},
-                  bucket: "gs://${config.bucket}/${config.environment}",
-                  pattern: ${config.pattern}])
-                  }
+            dir("target")
+                            {
+                            step([$class: 'ClassicUploadStep',
+                              credentialsId: ${config.project},
+                              bucket: "gs://${config.bucket}/${config.environment}",
+                              pattern: ${config.pattern}])
+                              }
+            }
             }
          }
       }
