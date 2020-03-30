@@ -1,5 +1,5 @@
 // node {
-//   config = readYaml file: 'config.yaml'
+//   config = readYaml file: 'config.yml'
 // }
 
 pipeline {
@@ -17,6 +17,7 @@ pipeline {
       stage('Build') {
          steps {
             // Get some code from a GitHub repository
+            config = readYaml file: 'config.yml'
             git "${config.repo}"
 
             // Run Maven on a Unix agent.
@@ -25,6 +26,7 @@ pipeline {
       }
       stage('Store to GCS') {
             steps{
+            config = readYaml file: 'config.yml'
                 dir("target")
                 {
                 step([$class: 'ClassicUploadStep',
