@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  *   --stagingLocation=<STAGING_LOCATION_IN_CLOUD_STORAGE>
  *   --runner=DataflowRunner
  */
-// Test commit2
+// Test commit3
 public class StarterPipeline {
   private static final Logger LOG = LoggerFactory.getLogger(StarterPipeline.class);
 
