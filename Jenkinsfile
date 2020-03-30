@@ -28,7 +28,7 @@ pipeline {
                 dir("target")
                 {
                 step([$class: 'ClassicUploadStep',
-                  credentialsId: ${config.project}
+                  credentialsId: ${config.project},
                   bucket: "gs://${config.bucket}/${config.environment}",
                   pattern: ${config.pattern}])
                   }
