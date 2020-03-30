@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * Platform, you should specify the following command-line options:
  *   --project=<YOUR_PROJECT_ID>
  *   --stagingLocation=<STAGING_LOCATION_IN_CLOUD_STORAGE>
- *   --runner=DataflowRunner0be7838b660d06e36292771e772b63a0c6a1be9f
+ *   --runner=DataflowRunner
  */
 // Test commit2
 public class StarterPipeline {
