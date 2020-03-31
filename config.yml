@@ -4,3 +4,4 @@ branch: develop
 environment: prod
 bucket: dataflow-cicd
 pattern: '*bundled*.jar'
+istemplate: false

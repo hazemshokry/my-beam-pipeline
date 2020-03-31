@@ -22,7 +22,11 @@
 
   <groupId>com.springml</groupId>
   <artifactId>my-beam-pipeline</artifactId>
-  <version>1.${build.number}</version>
+  <version>1.${build.number}}</version>
+
+  <scm>
+    <developerConnection>scm:svn:https://github.com/hazemshokry/my-beam-pipeline.git</developerConnection>
+  </scm>
 
   <properties>
     <beam.version>2.19.0</beam.version>
@@ -51,6 +55,11 @@
 
   <build>
    <plugins>
+     <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-release-plugin</artifactId>
+       <version>3.0.0-M1</version>
+     </plugin>
      <plugin>
        <groupId>org.apache.maven.plugins</groupId>
        <artifactId>maven-jar-plugin</artifactId>
@@ -183,7 +192,6 @@
       <artifactId>slf4j-jdk14</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
-
 
     <dependency>
     <groupId>org.apache.beam</groupId>

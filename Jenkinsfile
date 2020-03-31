@@ -1,14 +1,5 @@
-// node {
-//   config = readYaml file: 'config.yml'
-// }
-
 pipeline {
   agent any
-//   {
-//         docker {
-//             image 'gcr.io/cloud-builders/mvn'
-//         }
-//   }
   environment {
       PATH = "/usr/local/Cellar/maven/3.6.3_1/libexec/bin:$PATH"
   }
@@ -17,16 +8,9 @@ pipeline {
       stage('Build') {
          steps {
          script
-         {
-//          git "${config.repo}"
-         sh "mvn clean package"
-         }
-            // Get some code from a GitHub repository
-
-
-
-            // Run Maven on a Unix agent.
-
+            {
+            sh "mvn clean package"
+            }
          }
       }
       stage('Store to GCS') {
