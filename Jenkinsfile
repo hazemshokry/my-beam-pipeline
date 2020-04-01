@@ -1,6 +1,8 @@
-pipeline {
- node {
+node {
  config = readYaml file: 'config.yml'
+ }
+pipeline {
+
  agent any
  environment {
  // Setup Maven home
@@ -73,4 +75,3 @@ pipeline {
   }
  }
 }
- }
