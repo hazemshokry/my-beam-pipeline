@@ -1,6 +1,5 @@
 provider "google" {
-#  credentials = file("myspringml2-83641678f758.json")
   project     = "myspringml2"
   region      = "us-east1"
-  zone        = "us-east1-a"
+  zone        = "us-east1-b"
   }

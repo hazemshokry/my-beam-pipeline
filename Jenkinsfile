@@ -2,6 +2,7 @@ pipeline {
 
  agent any
  environment {
+ // Define Terraform home
   def tfHome = tool name: "Terraform"
 
  // Setup Maven home
@@ -10,25 +11,25 @@ pipeline {
 
  stages {
 
-  // Ignore this stage on failure.
-//   stage('Code Quality') {
-//    steps {
-//     catchError {
-//      script {
-//       sh "mvn sonar:sonar -Dmaven.test.skip=true"
-//      }
-//     }
-//     echo currentBuild.result
-//    }
-//   }
-//
-//   stage('Test') {
-//    steps {
-//      script {
-//       sh "mvn test"
-//      }
-//    }
-//   }
+  Ignore this stage on failure.
+  stage('Code Quality') {
+   steps {
+    catchError {
+     script {
+      sh "mvn sonar:sonar -Dmaven.test.skip=true"
+     }
+    }
+    echo currentBuild.result
+   }
+  }
+
+  stage('Test') {
+   steps {
+     script {
+      sh "mvn test"
+     }
+   }
+  }
 
   stage('Build') {
    steps {
