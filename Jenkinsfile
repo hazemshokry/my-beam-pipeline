@@ -36,14 +36,14 @@ pipeline {
    }
   }
 
-  stage('Store to GCS') {
+  stage('Store artifact to GCS') {
    steps {
     script {
      config = readYaml file: 'config.yml'
      dir("target") {
       step([$class: 'ClassicUploadStep',
        credentialsId: 'myspringml2',
-       bucket: "gs://${config.bucket}/${config.environment}",
+       bucket: "gs://${config.bucket}/${config.environment}/artifacts/${config.version}",
        pattern: '*bundled*.jar'
       ])
      }
@@ -56,27 +56,41 @@ pipeline {
     script{
      config = readYaml file: 'config.yml'
      input """
-     You are about to deploy ${config.jobtype} job ${config.jobname}-${config.version}.${BUILD_NUMBER}
+     You are about to deploy ${config.jobtype} job \"${config.jobname}-${config.version}.${BUILD_NUMBER}\"
      to ${config.environment}. Note that update batch job is not yes supported, confirm?"
      """
     }
    }
   }
 
- stage('deploy to prod'){
+
+ stage('Deploy to prod'){
     steps {
      script{
-      config = readYaml file: 'config.yml'
-            dir("target") {
-            sh "java -jar my-beam-pipeline-bundled-${config.version}.${BUILD_NUMBER}.jar \
-                  --runner=DataflowRunner \
-                  --project=${config.gcpProject} \
-                  --tempLocation=gs://${config.bucket}/temp/ \
-                  --jobName=${config.jobname}"
-            }
+     config = readYaml file: 'config.yml'
+     def stagingLocation = "gs://${config.environment}/staging/${config.version}"
+     def templateLocation = "gs://${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
+     sh """mvn compile exec:java \
+              -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
+              -Dexec.args=--\"runner=DataflowRunner \
+                           --project=${config.gcpProject} \
+                           --stagingLocation= ${stagingLocation} \
+                           --templateLocation= ${templateLocation}\""""
+     sh "terraform init"
+            dir("Terraform/prod") {
+                sh """
+                terraform plan -var job_name=${config.jobname} \
+                 -var template_gcs_path=${templateLocation} \
+                 -var template_gcs_path=gs://${config.environment}/tmp/${config.version}
+                """
+                input "Are you sure to apply these plan towards your Google account?"
+                sh """
+                terraform apply -var job_name=${config.jobname} \
+                 -var template_gcs_path=${templateLocation} \
+                 -var template_gcs_path=gs://${config.environment}/tmp/${config.version}
+                """
+                }
     }
-
-
     }
   }
  }
