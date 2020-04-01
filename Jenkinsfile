@@ -1,3 +1,5 @@
+config = readYaml file: 'config.yml'
+
 pipeline {
  agent any
  environment {
@@ -38,7 +40,6 @@ pipeline {
   stage('Store to GCS') {
    steps {
     script {
-     config = readYaml file: 'config.yml'
      dir("target") {
       step([$class: 'ClassicUploadStep',
        credentialsId: 'myspringml2',
@@ -53,7 +54,6 @@ pipeline {
  stage('Deploy to Google Dataflow approval'){
   steps {
     script{
-     config = readYaml file: 'config.yml'
      input "You're about to deploy ${config.Jobtype} job \"${config.jobname}-${config.version}.${build.number}\" to ${config.environment}. Note that update batch job is not yes supported, confirm?"
     }
    }
