@@ -8,9 +8,7 @@ pipeline {
         stage('Code Quality') {
                            steps {
                                script {
-                               {
                                   sh "mvn clean verify sonar:sonar"
-                                  }
                                        }
                                    }
                                 }
