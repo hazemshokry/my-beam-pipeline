@@ -52,7 +52,7 @@ pipeline {
 
  stage('Deploy to Google Dataflow approval'){
   steps {
-    input "You're about to deploy ${config.Jobtype} job \"${config.jobname}-${config.version}.${build.number}\"
+    input "You're about to deploy ${config.Jobtype} job \"${config.jobname}-${config.version}.${build.number}\" /
     to ${config.environment}. Note that update batch job is not yes supported, confirm?"
     }
   }
