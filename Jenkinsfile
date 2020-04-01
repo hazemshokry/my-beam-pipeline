@@ -11,7 +11,7 @@ pipeline {
 
  stages {
 
-  Ignore this stage on failure.
+//   Ignore this stage on failure.
   stage('Code Quality') {
    steps {
     catchError {
