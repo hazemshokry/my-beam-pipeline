@@ -74,13 +74,15 @@ pipeline {
      def stagingLocation = "gs://${config.bucket}/${config.environment}/staging/${config.version}"
      def templateLocation = "gs://${config.bucket}/${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
      def temp_gcs_location = "gs://${config.bucket}/${config.environment}/tmp/${config.version}"
+     def gcsFilePath = "gs://dataflow-cicd/data/input/*"
      sh """mvn compile exec:java \
               -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
               -Dexec.args=\"--runner=DataflowRunner \
                            --project=${config.gcpProject} \
                            --stagingLocation=${stagingLocation} \
                            --templateLocation=${templateLocation} \
-                           --tempLocation=${temp_gcs_location} \""""
+                           --tempLocation=${temp_gcs_location} \
+                           --GCSFilePath=${gcsFilePath}\""""
             dir("Terraform/prod") {
                 sh "terraform init"
                 sh """

@@ -14,7 +14,4 @@ resource "google_dataflow_job" "big_data_job" {
   name              = var.job_name
   temp_gcs_location = var.temp_gcs_location
   template_gcs_path = var.template_gcs_path
-  parameters = {
-      GCSFilePath = "gs://dataflow-cicd/data/input/*"
-    }
 }
