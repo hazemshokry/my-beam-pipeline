@@ -12,7 +12,7 @@ pipeline {
    steps {
     catchError {
      script {
-      sh "mvn verify sonar:sonar -Dmaven.test.skip=true"
+      sh "mvn sonar:sonar -Dmaven.test.skip=true"
      }
     }
     echo currentBuild.result
@@ -50,4 +50,13 @@ pipeline {
    }
   }
  }
+
+ stage('Deploy to Dataflow approval'){
+     input "Deploy to prod?"
+ }
+
+ stage('deploy to prod'){
+         echo "deploying"
+     }
+
 }
