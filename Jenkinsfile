@@ -80,7 +80,7 @@ pipeline {
                            --project=${config.gcpProject} \
                            --stagingLocation=${stagingLocation} \
                            --templateLocation=${templateLocation} \
-                           --tempLocation=${temp_gcs_location}\""""
+                           --tempLocation=${temp_gcs_location} \""""
             dir("Terraform/prod") {
                 sh "terraform init"
                 sh """
