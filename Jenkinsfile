@@ -69,8 +69,7 @@ pipeline {
      script{
      config = readYaml file: 'config.yml'
      def stagingLocation = "gs://${config.bucket}/${config.environment}/staging/${config.version}"
-     def templateLocation = "gs://${config.bucket}/${config.environment}/templates/${config.version}/\
-     ${config.jobname}-${config.version}.${BUILD_NUMBER}"
+     def templateLocation = "gs://${config.bucket}/${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
      def temp_gcs_location = "gs://${config.bucket}/${config.environment}/tmp/${config.version}"
      sh """mvn compile exec:java \
               -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
