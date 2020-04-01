@@ -62,14 +62,17 @@ pipeline {
 
  stage('deploy to prod'){
     steps {
-        config = readYaml file: 'config.yml'
-        dir("target") {
-        sh 'java -jar my-beam-pipeline-bundled-${config.version}.${build.number}.jar \
-              --runner=DataflowRunner \
-              --project=${config.gcpProject} \
-              --tempLocation="gs://${config.bucket}/temp/" \
-              --Job_Name=${config.jobname}'
-        }
+     script{
+      config = readYaml file: 'config.yml'
+            dir("target") {
+            sh 'java -jar my-beam-pipeline-bundled-${config.version}.${build.number}.jar \
+                  --runner=DataflowRunner \
+                  --project=${config.gcpProject} \
+                  --tempLocation="gs://${config.bucket}/temp/" \
+                  --Job_Name=${config.jobname}'
+            }
+    }
+
 
     }
   }
