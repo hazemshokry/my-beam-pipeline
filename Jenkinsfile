@@ -5,14 +5,22 @@ pipeline {
   }
 
    stages {
+        stage('Code Quality') {
+                           steps {
+                               script {
+                               {
+                                  sh "mvn clean verify sonar:sonar"
+                                  }
+                                       }
+                                   }
+                                }
       stage('Build') {
-         steps {
-         script
-            {
-            sh "mvn clean package"
-            }
-         }
-      }
+                            steps {
+                                script {
+                                    sh "mvn clean package"
+                                    }
+                                  }
+                     }
       stage('Store to GCS') {
             steps{
             script{
