@@ -55,7 +55,7 @@ pipeline {
   steps {
     script{
      config = readYaml file: 'config.yml'
-     input "You are about to deploy ${config.jobtype} job ${config.jobname}-${config.version}.${build.number} to ${config.environment}. Note that update batch job is not yes supported, confirm?"
+     input "${build.number} to ${config.environment}. Note that update batch job is not yes supported, confirm?"
     }
    }
   }
