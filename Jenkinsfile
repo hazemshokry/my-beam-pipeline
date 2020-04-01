@@ -80,10 +80,8 @@ pipeline {
                            --stagingLocation=${stagingLocation} \
                            --templateLocation=${templateLocation} \
                            --tempLocation=${temp_gcs_location}\""""
-     dir ("Terraform")
-     {
-     sh "terraform init"
-            dir("prod") {
+            dir("Terraform/prod") {
+                sh "terraform init"
                 sh """
                 terraform plan -var job_name=${config.jobname} \
                  -var template_gcs_path=${templateLocation} \
@@ -95,7 +93,6 @@ pipeline {
                  -var template_gcs_path=${templateLocation} \
                  -var temp_gcs_location=${temp_gcs_location}
                 """
-                }
                 }
     }
     }
