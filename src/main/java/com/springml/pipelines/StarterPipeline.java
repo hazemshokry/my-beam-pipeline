@@ -63,7 +63,7 @@ public class StarterPipeline {
 //    @Default.String("gs://dataflow-cicd/data/input/*")
 //    ValueProvider<String> getGCSFilePath();
     String getGCSFilePath();
-//    void setGCSFilePath(String value);
+    void setGCSFilePath(String value);
 
 //    @Description("Output PubSub Topic")
 //    @Default.String("projects/myspringml2/topics/cicd-test")
