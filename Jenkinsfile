@@ -70,18 +70,20 @@ pipeline {
      config = readYaml file: 'config.yml'
      def stagingLocation = "gs://${config.environment}/staging/${config.version}"
      def templateLocation = "gs://${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
+     def temp_gcs_location = "gs://${config.environment}/tmp/${config.version}"
      sh """mvn compile exec:java \
               -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
               -Dexec.args=\"--runner=DataflowRunner \
                            --project=${config.gcpProject} \
                            --stagingLocation=${stagingLocation} \
-                           --templateLocation=${templateLocation}\""""
+                           --templateLocation=${templateLocation} \
+                           --tempLocation=${temp_gcs_location}\""""
      sh "terraform init"
             dir("Terraform/prod") {
                 sh """
                 terraform plan -var job_name=${config.jobname} \
                  -var template_gcs_path=${templateLocation} \
-                 -var template_gcs_path=gs://${config.environment}/tmp/${config.version}
+                 -var temp_gcs_location=${temp_gcs_location}
                 """
                 input "Are you sure to apply these plan towards your Google account?"
                 sh """

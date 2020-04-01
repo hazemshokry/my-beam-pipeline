@@ -2,10 +2,6 @@ variable "job_name" {
   type = string
 }
 
-variable "bucket_name" {
-  type = string
-}
-
 variable "temp_gcs_location" {
   type = string
 }
