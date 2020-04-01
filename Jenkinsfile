@@ -41,7 +41,7 @@ pipeline {
      config = readYaml file: 'config.yml'
      dir("target") {
       step([$class: 'ClassicUploadStep',
-       credentialsId: "${config.project}",
+       credentialsId: 'myspringml2',
        bucket: "gs://${config.bucket}/${config.environment}",
        pattern: '*bundled*.jar'
       ])
@@ -58,7 +58,7 @@ pipeline {
 
  stage('deploy to prod'){
     steps {
-        dir(target) {
+        dir("target") {
         sh 'java -jar my-beam-pipeline-bundled-${config.version}.${build.number}.jar \
               --runner=DataflowRunner \
               --project=${config.gcpProject} \
