@@ -55,8 +55,7 @@ pipeline {
   steps {
     script{
      config = readYaml file: 'config.yml'
-     echo "got config"
-     input "You're about to deploy ${config.jobtype} job ${config.jobname}-${config.version}.${build.number} to ${config.environment}. Note that update batch job is not yes supported, confirm?"
+     input "${config.environment}. Note that update batch job is not yes supported, confirm?"
     }
    }
   }
@@ -70,7 +69,7 @@ pipeline {
                   --runner=DataflowRunner \
                   --project=${config.gcpProject} \
                   --tempLocation="gs://${config.bucket}/temp/" \
-                  --Job_Name=${config.jobname}'
+                  --jobName=${config.jobname}'
             }
     }
 
