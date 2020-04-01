@@ -2,8 +2,10 @@ pipeline {
 
  agent any
  environment {
+  def tfHome = tool name: "Terraform"
+
  // Setup Maven home
-  PATH = "/usr/local/Cellar/maven/3.6.3_1/libexec/bin:$PATH"
+  PATH = "/usr/local/Cellar/maven/3.6.3_1/libexec/bin:${tfHome}:$PATH"
  }
 
  stages {
