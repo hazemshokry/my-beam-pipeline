@@ -51,12 +51,15 @@ pipeline {
   }
 
  stage('Deploy to Dataflow approval'){
-     input "Deploy to prod?"
+  steps {
+    input "Deploy to prod?"
+    }
   }
 
  stage('deploy to prod'){
+    steps {
          echo "deploying"
+    }
   }
-
  }
 }
