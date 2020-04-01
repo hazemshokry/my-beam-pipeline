@@ -68,7 +68,7 @@ pipeline {
             sh "java -jar my-beam-pipeline-bundled-${config.version}.${build.number}.jar \
                   --runner=DataflowRunner \
                   --project=${config.gcpProject} \
-                  --tempLocation="gs://${config.bucket}/temp/" \
+                  --tempLocation=gs://${config.bucket}/temp/ \
                   --jobName=${config.jobname}""
             }
     }
