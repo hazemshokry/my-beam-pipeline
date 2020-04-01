@@ -55,7 +55,10 @@ pipeline {
   steps {
     script{
      config = readYaml file: 'config.yml'
-     input "You are about to deploy ${config.jobtype} job ${config.jobname}-${config.version}.${BUILD_NUMBER} to ${config.environment}. Note that update batch job is not yes supported, confirm?"
+     input """
+     You are about to deploy ${config.jobtype} job ${config.jobname}-${config.version}.${BUILD_NUMBER}
+     to ${config.environment}. Note that update batch job is not yes supported, confirm?"
+     """
     }
    }
   }
@@ -65,7 +68,7 @@ pipeline {
      script{
       config = readYaml file: 'config.yml'
             dir("target") {
-            sh "java -jar my-beam-pipeline-bundled-${config.version}.${build.number}.jar \
+            sh "java -jar my-beam-pipeline-bundled-${config.version}.${BUILD_NUMBER}.jar \
                   --runner=DataflowRunner \
                   --project=${config.gcpProject} \
                   --tempLocation=gs://${config.bucket}/temp/ \
