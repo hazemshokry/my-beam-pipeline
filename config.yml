@@ -1,8 +1,7 @@
 version: 1
 jobname: processcovid19
-Jobtype: batch
+jobtype: batch
 gcpProject: myspringml2
 environment: prod
 bucket: dataflow-cicd
-pattern: '*bundled*.jar'
 istemplate: false
