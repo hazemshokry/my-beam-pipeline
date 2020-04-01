@@ -87,7 +87,7 @@ pipeline {
                  -var template_gcs_path=${templateLocation} \
                  -var temp_gcs_location=${temp_gcs_location}
                 """
-                input "Are you sure to apply these plan towards your Google account?"
+//                 input "Are you sure to apply these plan towards your Google account?"
                 sh """
                 terraform apply -var job_name=${config.jobname} \
                  -var template_gcs_path=${templateLocation} \
