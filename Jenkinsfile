@@ -63,7 +63,7 @@ pipeline {
               --runner=DataflowRunner \
               --project=${config.gcpProject} \
               --tempLocation="gs://${config.bucket}/temp/" \
-              --Job_Name=${config.jobname}
+              --Job_Name=${config.jobname}'
         }
 
     }
