@@ -9,24 +9,24 @@ pipeline {
  stages {
 
   // Ignore this stage on failure.
-  stage('Code Quality') {
-   steps {
-    catchError {
-     script {
-      sh "mvn sonar:sonar -Dmaven.test.skip=true"
-     }
-    }
-    echo currentBuild.result
-   }
-  }
-
-  stage('Test') {
-   steps {
-     script {
-      sh "mvn test"
-     }
-   }
-  }
+//   stage('Code Quality') {
+//    steps {
+//     catchError {
+//      script {
+//       sh "mvn sonar:sonar -Dmaven.test.skip=true"
+//      }
+//     }
+//     echo currentBuild.result
+//    }
+//   }
+//
+//   stage('Test') {
+//    steps {
+//      script {
+//       sh "mvn test"
+//      }
+//    }
+//   }
 
   stage('Build') {
    steps {
@@ -73,7 +73,7 @@ pipeline {
      sh """mvn compile exec:java \
               -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
               -Dexec.args=\"--runner=DataflowRunner \
-                           --project=--${config.gcpProject} \
+                           --project=${config.gcpProject} \
                            --stagingLocation=${stagingLocation} \
                            --templateLocation=${templateLocation}\""""
      sh "terraform init"
