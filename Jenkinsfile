@@ -72,10 +72,10 @@ pipeline {
      def templateLocation = "gs://${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
      sh """mvn compile exec:java \
               -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
-              -Dexec.args=--\"runner=DataflowRunner \
-                           --project=${config.gcpProject} \
-                           --stagingLocation= ${stagingLocation} \
-                           --templateLocation= ${templateLocation}\""""
+              -Dexec.args=\"--runner=DataflowRunner \
+                           --project=--${config.gcpProject} \
+                           --stagingLocation=${stagingLocation} \
+                           --templateLocation=${templateLocation}\""""
      sh "terraform init"
             dir("Terraform/prod") {
                 sh """
