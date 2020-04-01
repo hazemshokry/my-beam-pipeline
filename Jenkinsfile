@@ -43,22 +43,30 @@ pipeline {
       step([$class: 'ClassicUploadStep',
        credentialsId: "${config.project}",
        bucket: "gs://${config.bucket}/${config.environment}",
-       pattern: "${config.pattern}"
+       pattern: '*bundled*.jar'
       ])
      }
     }
    }
   }
 
- stage('Deploy to Dataflow approval'){
+ stage('Deploy to Google Dataflow approval'){
   steps {
-    input "Deploy to prod?"
+    input "You're about to deploy ${config.Jobtype} job \"${config.jobname}-${config.version}.${build.number}\"
+    to ${config.environment}. Note that update batch job is not yes supported, confirm?"
     }
   }
 
  stage('deploy to prod'){
     steps {
-         echo "deploying"
+        dir(target) {
+        sh 'java -jar my-beam-pipeline-bundled-${config.version}.${build.number}.jar \
+              --runner=DataflowRunner \
+              --project=${config.gcpProject} \
+              --tempLocation="gs://${config.bucket}/temp/" \
+              --Job_Name=${config.jobname}
+        }
+
     }
   }
  }

@@ -1,6 +1,7 @@
-project: myspringml2
-repo: https://github.com/hazemshokry/my-beam-pipeline
-branch: develop
+version: 1
+jobname: processcovid19
+Jobtype: batch
+gcpProject: myspringml2
 environment: prod
 bucket: dataflow-cicd
 pattern: '*bundled*.jar'
