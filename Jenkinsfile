@@ -1,6 +1,3 @@
-node {
- config = readYaml file: 'config.yml'
- }
 pipeline {
 
  agent any
@@ -42,6 +39,7 @@ pipeline {
   stage('Store to GCS') {
    steps {
     script {
+     config = readYaml file: 'config.yml'
      dir("target") {
       step([$class: 'ClassicUploadStep',
        credentialsId: 'myspringml2',
@@ -56,6 +54,7 @@ pipeline {
  stage('Deploy to Google Dataflow approval'){
   steps {
     script{
+     config = readYaml file: 'config.yml'
      input "You're about to deploy ${config.Jobtype} job \"${config.jobname}-${config.version}.${build.number}\" to ${config.environment}. Note that update batch job is not yes supported, confirm?"
     }
    }
@@ -63,6 +62,7 @@ pipeline {
 
  stage('deploy to prod'){
     steps {
+        config = readYaml file: 'config.yml'
         dir("target") {
         sh 'java -jar my-beam-pipeline-bundled-${config.version}.${build.number}.jar \
               --runner=DataflowRunner \
