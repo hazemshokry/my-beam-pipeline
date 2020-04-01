@@ -12,7 +12,7 @@ pipeline {
    steps {
     catchError {
      script {
-      sh "mvn clean verify sonar:sonar"
+      sh "mvn verify sonar:sonar -Dmaven.test.skip=true"
      }
     }
     echo currentBuild.result
@@ -30,7 +30,7 @@ pipeline {
   stage('Build') {
    steps {
     script {
-     sh "mvn clean package"
+     sh "mvn clean package -Dmaven.test.skip=true"
     }
    }
   }
