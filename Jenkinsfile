@@ -54,6 +54,26 @@ pipeline {
    }
   }
 
+  stage('Deploy template to GCS') {
+   steps {
+        script{
+        config = readYaml file: 'config.yml'
+        def stagingLocation = "gs://${config.bucket}/${config.environment}/staging/${config.version}"
+        def templateLocation = "gs://${config.bucket}/${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
+        def temp_gcs_location = "gs://${config.bucket}/${config.environment}/tmp/${config.version}"
+        def gcsFilePath = "gs://dataflow-cicd/data/input/*"
+        sh """mvn compile exec:java \
+              -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
+              -Dexec.args=\"--runner=DataflowRunner \
+              --project=${config.gcpProject} \
+              --stagingLocation=${stagingLocation} \
+              --templateLocation=${templateLocation} \
+              --tempLocation=${temp_gcs_location} \
+              --GCSFilePath=${gcsFilePath}\""""
+    }
+   }
+  }
+
  stage('Deploy to Google Dataflow approval'){
   steps {
     script{
@@ -75,32 +95,24 @@ pipeline {
      def templateLocation = "gs://${config.bucket}/${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
      def temp_gcs_location = "gs://${config.bucket}/${config.environment}/tmp/${config.version}"
      def gcsFilePath = "gs://dataflow-cicd/data/input/*"
-     sh """mvn compile exec:java \
-              -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
-              -Dexec.args=\"--runner=DataflowRunner \
-                           --project=${config.gcpProject} \
-                           --stagingLocation=${stagingLocation} \
-                           --templateLocation=${templateLocation} \
-                           --tempLocation=${temp_gcs_location} \
-                           --GCSFilePath=${gcsFilePath}\""""
-            dir("Terraform/prod") {
-                sh "terraform init"
-                sh """
-                terraform plan -var job_name=${config.jobname} \
-                 -var template_gcs_path=${templateLocation} \
-                 -var temp_gcs_location=${temp_gcs_location} \
-                 -var gcpProject=${config.gcpProject}
-                """
-                input "Are you sure to apply these plan towards your GCP account?"
-                sh """
-                terraform apply -auto-approve -var job_name=${config.jobname} \
-                 -var template_gcs_path=${templateLocation} \
-                 -var temp_gcs_location=${temp_gcs_location} \
-                 -var gcpProject=${config.gcpProject}
-                """
-                }
+     dir("Terraform/prod") {
+         sh "terraform init"
+         sh """
+            terraform plan -var job_name=${config.jobname} \
+            -var template_gcs_path=${templateLocation} \
+            -var temp_gcs_location=${temp_gcs_location} \
+            -var gcpProject=${config.gcpProject}
+            """
+            input "Are you sure to apply this plan towards your GCP account?"
+         sh """
+            terraform apply -auto-approve -var job_name=${config.jobname} \
+            -var template_gcs_path=${templateLocation} \
+            -var temp_gcs_location=${temp_gcs_location} \
+            -var gcpProject=${config.gcpProject}
+            """
+     }
     }
-    }
+   }
   }
  }
 }
