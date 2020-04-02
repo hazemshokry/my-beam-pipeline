@@ -11,50 +11,50 @@ pipeline {
 
  stages {
 
-//   Ignore this stage on failure.
-  stage('Code Quality') {
-   steps {
-    catchError {
-     script {
-      sh "mvn sonar:sonar -Dmaven.test.skip=true"
-     }
-    }
-    echo currentBuild.result
-   }
-  }
+// //   Ignore this stage on failure.
+//   stage('Code Quality') {
+//    steps {
+//     catchError {
+//      script {
+//       sh "mvn sonar:sonar -Dmaven.test.skip=true"
+//      }
+//     }
+//     echo currentBuild.result
+//    }
+//   }
+//
+//   stage('Test') {
+//    steps {
+//      script {
+//       sh "mvn test"
+//      }
+//    }
+//   }
+//
+//   stage('Build') {
+//    steps {
+//     script {
+//      sh "mvn clean package -Dmaven.test.skip=true"
+//     }
+//    }
+//   }
+//
+//   stage('Store artifact to GCS') {
+//    steps {
+//     script {
+//      config = readYaml file: 'config.yml'
+//      dir("target") {
+//       step([$class: 'ClassicUploadStep',
+//        credentialsId: 'myspringml2',
+//        bucket: "gs://${config.bucket}/${config.environment}/artifacts/${config.version}",
+//        pattern: '*bundled*.jar'
+//       ])
+//      }
+//     }
+//    }
+//   }
 
-  stage('Test') {
-   steps {
-     script {
-      sh "mvn test"
-     }
-   }
-  }
-
-  stage('Build') {
-   steps {
-    script {
-     sh "mvn clean package -Dmaven.test.skip=true"
-    }
-   }
-  }
-
-  stage('Store artifact to GCS') {
-   steps {
-    script {
-     config = readYaml file: 'config.yml'
-     dir("target") {
-      step([$class: 'ClassicUploadStep',
-       credentialsId: 'myspringml2',
-       bucket: "gs://${config.bucket}/${config.environment}/artifacts/${config.version}",
-       pattern: '*bundled*.jar'
-      ])
-     }
-    }
-   }
-  }
-
-  stage('Deploy template to GCS') {
+  stage('Build template to GCS') {
    steps {
         script{
         config = readYaml file: 'config.yml'
@@ -104,8 +104,9 @@ pipeline {
             -var gcpProject=${config.gcpProject}
             """
             input "Are you sure to apply this plan towards your GCP account?"
+            sh "terraform destroy -target google_dataflow_job.big_data_job"
          sh """
-            terraform apply -destroy -auto-approve -var job_name=${config.jobname} \
+            terraform apply -auto-approve -var job_name=${config.jobname} \
             -var template_gcs_path=${templateLocation} \
             -var temp_gcs_location=${temp_gcs_location} \
             -var gcpProject=${config.gcpProject}
