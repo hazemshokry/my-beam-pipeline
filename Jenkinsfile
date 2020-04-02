@@ -104,7 +104,7 @@ pipeline {
             -var gcpProject=${config.gcpProject}
             """
             input "Are you sure to apply this plan towards your GCP account?"
-            sh "terraform destroy -target google_dataflow_job.big_data_job"
+            sh "terraform destroy -auto-approve -target google_dataflow_job.big_data_job"
          sh """
             terraform apply -auto-approve -var job_name=${config.jobname} \
             -var template_gcs_path=${templateLocation} \
