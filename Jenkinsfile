@@ -11,56 +11,56 @@ pipeline {
 
  stages {
 
-// //   Ignore this stage on failure.
-//   stage('Code Quality') {
-//    steps {
-//     catchError {
-//      script {
-//       sh "mvn sonar:sonar -Dmaven.test.skip=true"
-//      }
-//     }
-//     echo currentBuild.result
-//    }
-//   }
-//
-//   stage('Test') {
-//    steps {
-//      script {
-//       sh "mvn test"
-//      }
-//    }
-//   }
-//
-//   stage('Build') {
-//    steps {
-//     script {
-//      sh "mvn clean package -Dmaven.test.skip=true"
-//     }
-//    }
-//   }
-//
-//   stage('Store artifact to GCS') {
-//    steps {
-//     script {
-//      config = readYaml file: 'config.yml'
-//      dir("target") {
-//       step([$class: 'ClassicUploadStep',
-//        credentialsId: 'myspringml2',
-//        bucket: "gs://${config.bucket}/${config.environment}/artifacts/${config.version}",
-//        pattern: '*bundled*.jar'
-//       ])
-//      }
-//     }
-//    }
-//   }
+//   Ignore this stage on failure.
+  stage('Code Quality') {
+   steps {
+    catchError {
+     script {
+      sh "mvn sonar:sonar -Dmaven.test.skip=true"
+     }
+    }
+    echo currentBuild.result
+   }
+  }
+
+  stage('Test') {
+   steps {
+     script {
+      sh "mvn test"
+     }
+   }
+  }
+
+  stage('Build') {
+   steps {
+    script {
+     sh "mvn clean package -Dmaven.test.skip=true"
+    }
+   }
+  }
+
+  stage('Store artifact to GCS') {
+   steps {
+    script {
+     config = readYaml file: 'config.yml'
+     dir("target") {
+      step([$class: 'ClassicUploadStep',
+       credentialsId: 'myspringml2',
+       bucket: "gs://${config.bucket}/${config.environment}/${config.jobname}/${config.version}/artifacts",
+       pattern: '*bundled*.jar'
+      ])
+     }
+    }
+   }
+  }
 
   stage('Build template to GCS') {
    steps {
         script{
         config = readYaml file: 'config.yml'
-        def stagingLocation = "gs://${config.bucket}/${config.environment}/staging/${config.version}"
-        def templateLocation = "gs://${config.bucket}/${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
-        def temp_gcs_location = "gs://${config.bucket}/${config.environment}/tmp/${config.version}"
+        def stagingLocation = "gs://${config.bucket}/${config.environment}/${config.jobname}/version-${config.version}/staging"
+        def templateLocation = "gs://${config.bucket}/${config.environment}/${config.jobname}/version-${config.version}/templates/${config.jobname}-${config.version}.${BUILD_NUMBER}"
+        def temp_gcs_location = "gs://${config.bucket}/${config.environment}/${config.jobname}/version-${config.version}/temp"
         def gcsFilePath = "gs://dataflow-cicd/data/input/*"
         sh """mvn compile exec:java \
               -Dexec.mainClass=com.springml.pipelines.StarterPipeline \
@@ -91,9 +91,9 @@ pipeline {
     steps {
      script{
      config = readYaml file: 'config.yml'
-     def stagingLocation = "gs://${config.bucket}/${config.environment}/staging/${config.version}"
-     def templateLocation = "gs://${config.bucket}/${config.environment}/templates/${config.version}/${config.jobname}-${config.version}.${BUILD_NUMBER}"
-     def temp_gcs_location = "gs://${config.bucket}/${config.environment}/tmp/${config.version}"
+     def stagingLocation = "gs://${config.bucket}/${config.environment}/${config.jobname}/version-${config.version}/staging"
+     def templateLocation = "gs://${config.bucket}/${config.environment}/${config.jobname}/version-${config.version}/templates/${config.jobname}-${config.version}.${BUILD_NUMBER}"
+     def temp_gcs_location = "gs://${config.bucket}/${config.environment}/${config.jobname}/version-${config.version}/temp"
      def gcsFilePath = "gs://dataflow-cicd/data/input/*"
      dir("Terraform/prod") {
          sh "terraform init"
