@@ -1,5 +1,5 @@
 version: 1
-jobname: processcovid19
+jobname: StarterPipeline
 jobtype: batch
 gcpProject: myspringml2
 environment: prod

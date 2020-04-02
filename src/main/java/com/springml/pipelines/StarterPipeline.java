@@ -61,14 +61,13 @@ public class StarterPipeline {
     @Description("Input GCS File Path")
     // /Users/hazemsayed/Downloads/novel-corona-virus-2019-dataset/covid_19_data.csv
 //    @Default.String("gs://dataflow-cicd/data/input/*")
-//    ValueProvider<String> getGCSFilePath();
-    String getGCSFilePath();
-    void setGCSFilePath(String value);
+    ValueProvider<String> getGCSFilePath();
+    void setGCSFilePath(ValueProvider<String> value);
 
-//    @Description("Output PubSub Topic")
-//    @Default.String("projects/myspringml2/topics/cicd-test")
-//    ValueProvider<String> getOutputTopic();
-//    void setOutputTopic(ValueProvider<String> value);
+    @Description("Output PubSub Topic")
+    @Default.String("projects/myspringml2/topics/cicd-test")
+    ValueProvider<String> getOutputTopic();
+    void setOutputTopic(ValueProvider<String> value);
   }
 
   public static class FormatCountry extends DoFn<String, KV<String,Integer>> {
@@ -102,7 +101,7 @@ public class StarterPipeline {
 
     input.apply("Write to GS", TextIO.write().to("gs://dataflow-cicd/data/output/"));
     input.apply("Publish to PubSub", PubsubIO.writeStrings()
-            .to("projects/myspringml2/topics/cicd-test"));
+            .to(options.getOutputTopic()));
 
     p.run();
   }

@@ -88,13 +88,15 @@ pipeline {
                 sh """
                 terraform plan -var job_name=${config.jobname} \
                  -var template_gcs_path=${templateLocation} \
-                 -var temp_gcs_location=${temp_gcs_location}
+                 -var temp_gcs_location=${temp_gcs_location} \
+                 -var gcpProject=${config.gcpProject}
                 """
-                input "Are you sure to apply these plan towards your Google account?"
+                input "Are you sure to apply these plan towards your GCP account?"
                 sh """
                 terraform apply -auto-approve -var job_name=${config.jobname} \
                  -var template_gcs_path=${templateLocation} \
-                 -var temp_gcs_location=${temp_gcs_location}
+                 -var temp_gcs_location=${temp_gcs_location} \
+                 -var gcpProject=${config.gcpProject}
                 """
                 }
     }
