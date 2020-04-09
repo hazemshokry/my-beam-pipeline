@@ -76,7 +76,7 @@ pipeline {
 
  stage('Deploy to Google Dataflow approval'){
   when {
-         ${config.environment} 'prod'
+         environment name: '${config.jobtype}', value: 'prod'
        }
   steps {
     script{
