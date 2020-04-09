@@ -75,12 +75,13 @@ pipeline {
   }
 
  stage('Deploy to Google Dataflow approval'){
+      config = readYaml file: 'config.yml'
+
   when {
          environment name: '${config.jobtype}', value: 'prod'
        }
   steps {
     script{
-     config = readYaml file: 'config.yml'
      input """
      You are about to deploy ${config.jobtype} job \"${config.jobname}-${config.version}.${BUILD_NUMBER}\"
      to ${config.environment}. Note that update batch job is not yes supported, confirm?"
