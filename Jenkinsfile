@@ -4,9 +4,6 @@ pipeline {
  environment {
  // Define Terraform home
   def tfHome = tool name: "Terraform"
-       config = readYaml file: 'config.yml'
-       def envv = ${config.environment}
-
 
  // Setup Maven home
   PATH = "/usr/local/Cellar/maven/3.6.3_1/libexec/bin:${tfHome}:$PATH"
@@ -79,8 +76,8 @@ pipeline {
 
  stage('Deploy to Google Dataflow approval'){
   when {
-         environment name: 'envv', value: 'prod'
-       }
+        branch 'prod'
+      }
   steps {
     script{
      input """
