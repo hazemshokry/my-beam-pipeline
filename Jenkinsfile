@@ -76,7 +76,7 @@ pipeline {
 
  stage('Deploy to Google Dataflow approval'){
   when {
-        branch 'prod'
+        branch 'master'
       }
   steps {
     script{
