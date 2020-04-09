@@ -75,6 +75,9 @@ pipeline {
   }
 
  stage('Deploy to Google Dataflow approval'){
+  when {
+         ${config.environment} 'prod'
+       }
   steps {
     script{
      config = readYaml file: 'config.yml'
