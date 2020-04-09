@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  *   --stagingLocation=<STAGING_LOCATION_IN_CLOUD_STORAGE>
  *   --runner=DataflowRunner
  */
-// Test commit3
+// Test commit4
 public class StarterPipeline {
   private static final Logger LOG = LoggerFactory.getLogger(StarterPipeline.class);
 
@@ -96,8 +96,8 @@ public class StarterPipeline {
     input.apply("Write to File", TextIO.write().to("src/covid_19_data_output.csv").withoutSharding());
 
     input.apply("Write to GS", TextIO.write().to("gs://dataflow-cicd/data/output/"));
-    input.apply("Publish to PubSub", PubsubIO.writeStrings()
-            .to(options.getOutputTopic()));
+    //input.apply("Publish to PubSub", PubsubIO.writeStrings()
+           // .to(options.getOutputTopic()));
 
     p.run();
   }
