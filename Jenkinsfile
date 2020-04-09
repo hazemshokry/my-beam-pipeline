@@ -31,28 +31,28 @@ pipeline {
    }
   }
 
-//   stage('Build') {
-//    steps {
-//     script {
-//      sh "mvn clean package -Dmaven.test.skip=true"
-//     }
-//    }
-//   }
-//
-//   stage('Store artifact to GCS') {
-//    steps {
-//     script {
-//      config = readYaml file: 'config.yml'
-//      dir("target") {
-//       step([$class: 'ClassicUploadStep',
-//        credentialsId: 'myspringml2',
-//        bucket: "gs://${config.bucket}/${config.environment}/${config.jobname}/${config.version}/artifacts",
-//        pattern: '*bundled*.jar'
-//       ])
-//      }
-//     }
-//    }
-//   }
+  stage('Build') {
+   steps {
+    script {
+     sh "mvn clean package -Dmaven.test.skip=true"
+    }
+   }
+  }
+
+  stage('Store artifact to GCS') {
+   steps {
+    script {
+     config = readYaml file: 'config.yml'
+     dir("target") {
+      step([$class: 'ClassicUploadStep',
+       credentialsId: 'myspringml2',
+       bucket: "gs://${config.bucket}/${config.environment}/${config.jobname}/${config.version}/artifacts",
+       pattern: '*bundled*.jar'
+      ])
+     }
+    }
+   }
+  }
 
   stage('Build template to GCS') {
    steps {
