@@ -5,7 +5,7 @@ pipeline {
  // Define Terraform home
   def tfHome = tool name: "Terraform"
        config = readYaml file: 'config.yml'
-       def envv = '${config.environment}'
+       def envv = ${config.environment}
 
 
  // Setup Maven home
